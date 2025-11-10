@@ -113,3 +113,75 @@ async def async_setup_entry(
     
     _LOGGER.critical("Created %d area light group(s)", len(groups))
     async_add_entities(groups)
+
+
+class AreaLightGroup(LightEntity):
+    """Representation of a light group tied to an area."""
+
+    def __init__(self, hass, name, area_id, light_entities, prefix):
+        """Initialize the area light group."""
+        self.hass = hass
+        self._name = f"{prefix}{name}"
+        self._area_id = area_id
+        self._light_entities = light_entities
+        self._is_on = False
+        self._brightness = None
+
+    @property
+    def name(self):
+        """Return the name of the light group.""" 
+        return self._name
+
+    @property
+    def is_on(self):
+        """Return if the light group is on.""" 
+        return self._is_on
+
+    @property
+    def brightness(self):
+        """Return the brightness of the light group.""" 
+        return self._brightness
+
+    @property
+    def supported_color_modes(self):
+        """Return the supported color modes for the group."""
+        # Assuming the lights in the group support brightness control.
+        # This can be updated based on your target lights' capabilities.
+        return {ColorMode.BRIGHTNESS}
+
+    @property
+    def color_mode(self):
+        """Return the current color mode of the group."""
+        # Assuming the group works in brightness mode only.
+        # This can be expanded based on the group setup.
+        return ColorMode.BRIGHTNESS
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on all lights in the group.""" 
+        _LOGGER.debug("Turning on light group %s", self._name)
+        self._is_on = True
+        for light in self._light_entities:
+            await self.hass.services.async_call(
+                "light", "turn_on", {"entity_id": light, **kwargs}
+            )
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off all lights in the group.""" 
+        _LOGGER.debug("Turning off light group %s", self._name)
+        self._is_on = False
+        for light in self._light_entities:
+            await self.hass.services.async_call(
+                "light", "turn_off", {"entity_id": light, **kwargs}
+            )
+
+    async def async_update(self):
+        """Fetch state of the group.""" 
+        _LOGGER.debug("Updating state for light group %s", self._name)
+        states = [
+            self.hass.states.get(entity_id) for entity_id in self._light_entities
+        ]
+        self._is_on = any(state.state == STATE_ON for state in states)
+        brightness_values = [
+            state.attributes.get(ATTR_BRIGHTNESS) for state in states if state
+        ]
+        self._brightness = max(brightness_values) if brightness_values else None
