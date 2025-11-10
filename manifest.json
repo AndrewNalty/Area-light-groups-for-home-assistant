@@ -1,0 +1,12 @@
+{
+  "domain": "area_light_groups",
+  "name": "Area Light Groups",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/yourusername/area_light_groups",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "requirements": [],
+  "version": "1.0.0"
+}
