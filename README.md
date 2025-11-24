@@ -31,3 +31,22 @@ These area light groups behave like regular light entities and can be:
 For examples of how to safely use Area Light Groups in automations, especially with MQTT triggers and template conditions, see [AUTOMATION_EXAMPLES.md](AUTOMATION_EXAMPLES.md).
 
 **Important**: When using templates that access trigger payloads, always use safe attribute access patterns (see the automation examples) to avoid template errors.
+
+## Troubleshooting
+
+### Template Variable Warnings
+
+If you see errors like:
+```
+Template variable warning: 'dict object' has no attribute 'action'
+```
+
+This means you're trying to access a dictionary key that doesn't exist. See [AUTOMATION_EXAMPLES.md](AUTOMATION_EXAMPLES.md) for the correct patterns to use.
+
+For technical details about the fix, see [TECHNICAL_SUMMARY.md](TECHNICAL_SUMMARY.md).
+
+## Resources
+
+- [Automation Examples](AUTOMATION_EXAMPLES.md) - Safe template patterns and automation examples
+- [Blueprint Example](blueprints/mqtt_button_area_lights.yaml) - Ready-to-use automation blueprint
+- [Technical Summary](TECHNICAL_SUMMARY.md) - Technical details about template error fixes
