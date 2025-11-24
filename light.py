@@ -182,6 +182,8 @@ class AreaLightGroup(LightEntity):
         ]
         self._is_on = any(state.state == STATE_ON for state in states)
         brightness_values = [
-            state.attributes.get(ATTR_BRIGHTNESS) for state in states if state
+            state.attributes.get(ATTR_BRIGHTNESS) 
+            for state in states 
+            if state and state.attributes.get(ATTR_BRIGHTNESS) is not None
         ]
         self._brightness = max(brightness_values) if brightness_values else None
