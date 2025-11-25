@@ -180,7 +180,7 @@ class AreaLightGroup(LightEntity):
         states = [
             self.hass.states.get(entity_id) for entity_id in self._light_entities
         ]
-        self._is_on = any(state and state.state == STATE_ON for state in states)
+        self._is_on = any(state.state == STATE_ON for state in states)
         brightness_values = [
             state.attributes.get(ATTR_BRIGHTNESS) 
             for state in states 
